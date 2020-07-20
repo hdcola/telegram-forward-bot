@@ -8,6 +8,8 @@ import telegram
 import os
 import logging
 import threading
+import getopt
+import sys
 
 Version_Code = 'v1.0.0'
 
@@ -15,38 +17,21 @@ logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
                     )
 
-PATH = os.path.dirname(os.path.realpath(__file__)) + '/'
-
-CONFIG = json.loads(open(PATH + 'config.json', 'r').read())
-
-DATA_LOCK = False
-
-submission_list = json.loads(open(PATH + 'data.json', 'r').read())
-
 def save_data():
     global DATA_LOCK
     while DATA_LOCK:
         time.sleep(0.05)
     DATA_LOCK = True
-    f = open(PATH + 'data.json', 'w')
+    f = open(os.path.join(PATH,"data.json"), 'w')
     f.write(json.dumps(submission_list, ensure_ascii=False))
     f.close()
     DATA_LOCK = False
 
 
 def save_config():
-    f = open(PATH + 'config.json', 'w')
+    f = open(os.path.join(PATH,"config.json"), 'w')
     f.write(json.dumps(CONFIG, indent=4))
     f.close()
-
-updater = Updater(CONFIG['Token'], use_context=True)
-dispatcher = updater.dispatcher
-
-me = updater.bot.get_me()
-CONFIG['ID'] = me.id
-CONFIG['Username'] = '@' + me.username
-
-print('Starting... (ID: ' + str(CONFIG['ID']) + ', Username: ' + CONFIG['Username'] + ')')
 
 def check_member(bot,chatid,userid):
     try:
@@ -333,21 +318,55 @@ def process_callback(update, context):
                           message_id=query.message.message_id)
     threading.Thread(target=save_data).start()
 
-dispatcher.add_handler(MessageHandler(Filters.command,process_command))
 
-dispatcher.add_handler(MessageHandler( Filters.text
-                       | Filters.audio
-                       | Filters.photo
-                       | Filters.video
-                       | Filters.voice
-                       | Filters.document , process_msg))
+def help():
+    return "'main.py -c <configpath>'"
 
-dispatcher.add_handler(CallbackQueryHandler(process_callback))
+if __name__ == '__main__':
 
-updater.start_polling()
-print('Started')
-updater.idle()
-print('Stopping...')
-save_data()
-print('Data saved.')
-print('Stopped.')
+    PATH = os.path.dirname(os.path.expanduser("~/.forwardbot/"))
+
+    try:
+        opts, args = getopt.getopt(sys.argv[1:],"hc:",["config="])
+    except getopt.GetoptError:
+        print(help())
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt == '-h':
+            print(help())
+            sys.exit()
+        elif opt in ("-c","--config"):
+            PATH = arg
+
+    CONFIG = json.loads(open(os.path.join(PATH,"config.json"), 'r').read())
+
+    DATA_LOCK = False
+
+    submission_list = json.loads(open(os.path.join(PATH,"data.json"), 'r').read())
+
+    updater = Updater(CONFIG['Token'], use_context=True)
+    dispatcher = updater.dispatcher
+
+    me = updater.bot.get_me()
+    CONFIG['ID'] = me.id
+    CONFIG['Username'] = '@' + me.username
+
+    print('Starting... (ID: ' + str(CONFIG['ID']) + ', Username: ' + CONFIG['Username'] + ')')
+
+    dispatcher.add_handler(CallbackQueryHandler(process_callback))
+    dispatcher.add_handler(MessageHandler(Filters.command,process_command))
+    dispatcher.add_handler(MessageHandler( Filters.text
+                        | Filters.audio
+                        | Filters.photo
+                        | Filters.video
+                        | Filters.voice
+                        | Filters.document , process_msg))
+
+    updater.start_polling()
+    print('Started')
+    updater.idle()
+    print('Stopping...')
+    save_data()
+    print('Data saved.')
+    print('Stopped.')
