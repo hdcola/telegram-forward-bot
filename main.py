@@ -348,14 +348,14 @@ def process_callback(update, context):
                           message_id=query.message.message_id)
     threading.Thread(target=save_data).start()
 
-dispatcher.add_handler(CommandHandler(["start","setgroup"],process_command))
+dispatcher.add_handler(MessageHandler(Filters.command,process_command))
 
-dispatcher.add_handler(MessageHandler( (Filters.text
+dispatcher.add_handler(MessageHandler( Filters.text
                        | Filters.audio
                        | Filters.photo
                        | Filters.video
                        | Filters.voice
-                       | Filters.document ) & ~Filters.command , process_msg))
+                       | Filters.document , process_msg))
 
 dispatcher.add_handler(CallbackQueryHandler(process_callback))
 
