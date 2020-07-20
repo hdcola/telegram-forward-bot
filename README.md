@@ -62,3 +62,8 @@ python main.py -c /usr/local/etc/forwardbot
 ```
 
 来指定配置文件和data的存储路径。
+
+
+## 感谢
+
+代码不少使用了 https://github.com/Netrvin/telegram-submission-bot 感谢他的轮子
