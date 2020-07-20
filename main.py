@@ -64,14 +64,14 @@ def process_msg(update, context):
                 post = anonymous_post(bot, msg,
                         update.message.from_user)
             if update.message.text != None:
-                for chat_id in CONFIG['Publish_Channel_ID']:
+                for chat_id in CONFIG['Publish_Group_ID']:
                     bot.send_message(chat_id=chat_id,
                                     text=update.message.text,
                                     reply_to_message_id=post.message_id)
             return
     if update.message.from_user.id == update.message.chat_id:
         member = False
-        for chat_id in CONFIG['Publish_Channel_ID']:
+        for chat_id in CONFIG['Publish_Group_ID']:
             if check_member(bot,chat_id,update.message.from_user.id):
                 member = True
         if member :
@@ -131,7 +131,7 @@ def process_command(update, context):
 
 
 def send_anonymous_post(bot, msg, editor):
-    for chatid in CONFIG['Publish_Channel_ID']:
+    for chatid in CONFIG['Publish_Group_ID']:
         if msg.audio != None:
             r = bot.send_audio(chat_id=chatid,
                             audio=msg.audio, caption=msg.caption)
@@ -155,7 +155,7 @@ def send_anonymous_post(bot, msg, editor):
 
 
 def anonymous_post(bot, msg, editor):
-    for chatid in CONFIG['Publish_Channel_ID']:
+    for chatid in CONFIG['Publish_Group_ID']:
         if msg.audio != None:
             r = bot.send_audio(chat_id=chatid,
                             audio=msg.audio, caption=msg.caption)
@@ -204,7 +204,7 @@ def anonymous_post(bot, msg, editor):
 
 def real_name_post(bot, msg, editor):
     global submission_list
-    for chatid in CONFIG['Publish_Channel_ID']:
+    for chatid in CONFIG['Publish_Group_ID']:
         r = bot.forward_message(chat_id=chatid,
                                 from_chat_id=CONFIG['Group_ID'],
                                 message_id=msg.message_id)
