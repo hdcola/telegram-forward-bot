@@ -2,6 +2,5 @@
     "Admin": 0,
     "Token": "",
     "Group_ID": 0,
-    "Publish_Channel_ID": 0,
-    "Publish_Channel_ID1": 0
+    "Publish_Channel_ID": []
 }
