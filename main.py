@@ -3,18 +3,11 @@
 
 import time
 import json
-import telegram.ext
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 import telegram
-import sys
-import datetime
 import os
 import logging
 import threading
-import six
-
-if six.PY2:
-    reload(sys)
-    sys.setdefaultencoding('utf8')
 
 Version_Code = 'v1.0.0'
 
@@ -46,8 +39,7 @@ def save_config():
     f.write(json.dumps(CONFIG, indent=4))
     f.close()
 
-
-updater = telegram.ext.Updater(token=CONFIG['Token'])
+updater = Updater(CONFIG['Token'], use_context=True)
 dispatcher = updater.dispatcher
 
 me = updater.bot.get_me()
@@ -63,7 +55,8 @@ def check_member(bot,chatid,userid):
     except telegram.TelegramError as e:
         return False
 
-def process_msg(bot, update):
+def process_msg(update, context):
+    bot = context.bot
     if update.channel_post != None:
         return
     if update.message.chat_id == CONFIG['Group_ID'] \
@@ -126,7 +119,8 @@ def process_msg(bot, update):
                             reply_markup=markup)
 
 
-def process_command(bot, update):
+def process_command(update, context):
+    bot = context.bot
     if update.channel_post != None:
         return
     command = update.message.text[1:].replace(CONFIG['Username'], ''
@@ -140,13 +134,7 @@ def process_command(bot, update):
 视频
 文件""")
         return
-    if command == 'version':
-        bot.send_message(chat_id=update.message.chat_id,
-                         text='Telegram Submission Bot\n'
-                         + Version_Code
-                         + '\nhttps://github.com/Netrvin/telegram-submission-bot'
-                         )
-        return
+
     if update.message.from_user.id == CONFIG['Admin']:
         if command == 'setgroup':
             CONFIG['Group_ID'] = update.message.chat_id
@@ -278,7 +266,8 @@ def real_name_post(bot, msg, editor):
     return r
 
 
-def process_callback(bot, update):
+def process_callback(update, context):
+    bot = context.bot
     if update.channel_post != None:
         return
     global submission_list
@@ -359,18 +348,16 @@ def process_callback(bot, update):
                           message_id=query.message.message_id)
     threading.Thread(target=save_data).start()
 
+dispatcher.add_handler(CommandHandler(["start","setgroup"],process_command))
 
-dispatcher.add_handler(telegram.ext.MessageHandler(telegram.ext.Filters.text
-                       | telegram.ext.Filters.audio
-                       | telegram.ext.Filters.photo
-                       | telegram.ext.Filters.video
-                       | telegram.ext.Filters.voice
-                       | telegram.ext.Filters.document, process_msg))
+dispatcher.add_handler(MessageHandler( (Filters.text
+                       | Filters.audio
+                       | Filters.photo
+                       | Filters.video
+                       | Filters.voice
+                       | Filters.document ) & ~Filters.command , process_msg))
 
-dispatcher.add_handler(telegram.ext.MessageHandler(telegram.ext.Filters.command,
-                       process_command))
-
-dispatcher.add_handler(telegram.ext.CallbackQueryHandler(process_callback))
+dispatcher.add_handler(CallbackQueryHandler(process_callback))
 
 updater.start_polling()
 print('Started')
