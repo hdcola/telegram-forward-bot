@@ -35,7 +35,7 @@ mkdir ~/.forwardbot/
 {
     "Admin": 0,                   //管理员用户ID（通常为8~9位数字）
     "Token": "",                  //Bot的Token
-    "Group_ID": [],               //审核群或用户的ID
+    "Group_ID": 0,               //审核群或用户的ID
     "Publish_Group_ID": []        //群ID（如：@channel）列表
 }
 ```
