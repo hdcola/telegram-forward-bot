@@ -108,10 +108,14 @@ def process_callback(update, context):
     if update.channel_post != None:
         return
     query = update.callback_query
-    query.answer()
 
     button,count = query.data.split(":")
     count = int(count) + 1
+
+    if button == "d":
+        query.answer("感谢您的👍",show_alert=True)
+    else:
+        query.answer("收到您的👎",show_alert=True)
 
     buttons = query.message.reply_markup.inline_keyboard[0]
     update_buttons = []
