@@ -3,15 +3,13 @@
 
 import time
 import json
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
+from telegram.ext import Updater, MessageHandler, Filters, CallbackQueryHandler
 import telegram
 import os
 import logging
 import threading
 import getopt
 import sys
-
-Version_Code = 'v1.0.0'
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
