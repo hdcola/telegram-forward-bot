@@ -50,7 +50,7 @@ print('Starting... (ID: ' + str(CONFIG['ID']) + ', Username: ' + CONFIG['Usernam
 
 def check_member(bot,chatid,userid):
     try:
-        bot.get_chat_member(CONFIG['Publish_Channel_ID'],userid)
+        bot.get_chat_member(chatid,userid)
         return True
     except telegram.TelegramError as e:
         return False
@@ -81,14 +81,17 @@ def process_msg(update, context):
                 post = anonymous_post(bot, msg,
                         update.message.from_user)
             if update.message.text != None:
-                bot.send_message(chat_id=CONFIG['Publish_Channel_ID'],
-                                 text=update.message.text,
-                                 reply_to_message_id=post.message_id)
+                for chat_id in CONFIG['Publish_Channel_ID']:
+                    bot.send_message(chat_id=chat_id,
+                                    text=update.message.text,
+                                    reply_to_message_id=post.message_id)
             return
     if update.message.from_user.id == update.message.chat_id:
-        if check_member(updater.bot,CONFIG['Publish_Channel_ID'],update.message.from_user.id) :
-            send_anonymous_post(bot, update.message,update.message.from_user)
-        elif check_member(updater.bot,CONFIG['Publish_Channel_ID1'],update.message.from_user.id) :
+        member = False
+        for chat_id in CONFIG['Publish_Channel_ID']:
+            if check_member(bot,chat_id,update.message.from_user.id):
+                member = True
+        if member :
             send_anonymous_post(bot, update.message,update.message.from_user)
         else:
             markup = \
@@ -145,70 +148,51 @@ def process_command(update, context):
 
 
 def send_anonymous_post(bot, msg, editor):
-    if msg.audio != None:
-        r = bot.send_audio(chat_id=CONFIG['Publish_Channel_ID'],
-                           audio=msg.audio, caption=msg.caption)
-    elif msg.document != None:
-        r = bot.send_document(chat_id=CONFIG['Publish_Channel_ID'],
-                              document=msg.document,
-                              caption=msg.caption)
-    elif msg.voice != None:
-        r = bot.send_voice(chat_id=CONFIG['Publish_Channel_ID'],
-                           voice=msg.voice, caption=msg.caption)
-    elif msg.video != None:
-        r = bot.send_video(chat_id=CONFIG['Publish_Channel_ID'],
-                           video=msg.video, caption=msg.caption)
-    elif msg.photo:
-        r = bot.send_photo(chat_id=CONFIG['Publish_Channel_ID'],
-                           photo=msg.photo[0], caption=msg.caption)
-    else:
-        r = bot.send_message(chat_id=CONFIG['Publish_Channel_ID'],
-                             text=msg.text_markdown,
-                             parse_mode=telegram.ParseMode.MARKDOWN)
-
-    if msg.audio != None:
-        r = bot.send_audio(chat_id=CONFIG['Publish_Channel_ID1'],
-                           audio=msg.audio, caption=msg.caption)
-    elif msg.document != None:
-        r = bot.send_document(chat_id=CONFIG['Publish_Channel_ID1'],
-                              document=msg.document,
-                              caption=msg.caption)
-    elif msg.voice != None:
-        r = bot.send_voice(chat_id=CONFIG['Publish_Channel_ID1'],
-                           voice=msg.voice, caption=msg.caption)
-    elif msg.video != None:
-        r = bot.send_video(chat_id=CONFIG['Publish_Channel_ID1'],
-                           video=msg.video, caption=msg.caption)
-    elif msg.photo:
-        r = bot.send_photo(chat_id=CONFIG['Publish_Channel_ID1'],
-                           photo=msg.photo[0], caption=msg.caption)
-    else:
-        r = bot.send_message(chat_id=CONFIG['Publish_Channel_ID1'],
-                             text=msg.text_markdown,
-                             parse_mode=telegram.ParseMode.MARKDOWN)
+    for chatid in CONFIG['Publish_Channel_ID']:
+        if msg.audio != None:
+            r = bot.send_audio(chat_id=chatid,
+                            audio=msg.audio, caption=msg.caption)
+        elif msg.document != None:
+            r = bot.send_document(chat_id=chatid,
+                                document=msg.document,
+                                caption=msg.caption)
+        elif msg.voice != None:
+            r = bot.send_voice(chat_id=chatid,
+                            voice=msg.voice, caption=msg.caption)
+        elif msg.video != None:
+            r = bot.send_video(chat_id=chatid,
+                            video=msg.video, caption=msg.caption)
+        elif msg.photo:
+            r = bot.send_photo(chat_id=chatid,
+                            photo=msg.photo[0], caption=msg.caption)
+        else:
+            r = bot.send_message(chat_id=chatid,
+                                text=msg.text_markdown,
+                                parse_mode=telegram.ParseMode.MARKDOWN)
 
 
 def anonymous_post(bot, msg, editor):
-    if msg.audio != None:
-        r = bot.send_audio(chat_id=CONFIG['Publish_Channel_ID'],
-                           audio=msg.audio, caption=msg.caption)
-    elif msg.document != None:
-        r = bot.send_document(chat_id=CONFIG['Publish_Channel_ID'],
-                              document=msg.document,
-                              caption=msg.caption)
-    elif msg.voice != None:
-        r = bot.send_voice(chat_id=CONFIG['Publish_Channel_ID'],
-                           voice=msg.voice, caption=msg.caption)
-    elif msg.video != None:
-        r = bot.send_video(chat_id=CONFIG['Publish_Channel_ID'],
-                           video=msg.video, caption=msg.caption)
-    elif msg.photo:
-        r = bot.send_photo(chat_id=CONFIG['Publish_Channel_ID'],
-                           photo=msg.photo[0], caption=msg.caption)
-    else:
-        r = bot.send_message(chat_id=CONFIG['Publish_Channel_ID'],
-                             text=msg.text_markdown,
-                             parse_mode=telegram.ParseMode.MARKDOWN)
+    for chatid in CONFIG['Publish_Channel_ID']:
+        if msg.audio != None:
+            r = bot.send_audio(chat_id=chatid,
+                            audio=msg.audio, caption=msg.caption)
+        elif msg.document != None:
+            r = bot.send_document(chat_id=chatid,
+                                document=msg.document,
+                                caption=msg.caption)
+        elif msg.voice != None:
+            r = bot.send_voice(chat_id=chatid,
+                            voice=msg.voice, caption=msg.caption)
+        elif msg.video != None:
+            r = bot.send_video(chat_id=chatid,
+                            video=msg.video, caption=msg.caption)
+        elif msg.photo:
+            r = bot.send_photo(chat_id=chatid,
+                            photo=msg.photo[0], caption=msg.caption)
+        else:
+            r = bot.send_message(chat_id=chatid,
+                                text=msg.text_markdown,
+                                parse_mode=telegram.ParseMode.MARKDOWN)
 
     submission_list[str(CONFIG['Group_ID']) + ':'
                     + str(msg.message_id)]['posted'] = True
@@ -237,9 +221,10 @@ def anonymous_post(bot, msg, editor):
 
 def real_name_post(bot, msg, editor):
     global submission_list
-    r = bot.forward_message(chat_id=CONFIG['Publish_Channel_ID'],
-                            from_chat_id=CONFIG['Group_ID'],
-                            message_id=msg.message_id)
+    for chatid in CONFIG['Publish_Channel_ID']:
+        r = bot.forward_message(chat_id=chatid,
+                                from_chat_id=CONFIG['Group_ID'],
+                                message_id=msg.message_id)
 
     submission_list[str(CONFIG['Group_ID']) + ':'
                     + str(msg.message_id)]['posted'] = True
