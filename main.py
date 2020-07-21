@@ -10,7 +10,7 @@ import logging
 import getopt
 import sys
 try:
-    from systemd.daemon
+    import systemd.daemon
     from systemd import journal
     systemd_enable=True
 except ImportError:
