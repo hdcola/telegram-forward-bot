@@ -1,0 +1,10 @@
+[Unit]
+Description=Telegram Forward Bot Service
+
+[Service]
+ExecStart=/usr/bin/python path/to/your/main.py -c /home/pi/fbot/tssd
+Restart=on-failure
+Type=notify
+
+[Install]
+WantedBy=default.target

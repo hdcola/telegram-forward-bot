@@ -9,6 +9,12 @@ import os
 import logging
 import getopt
 import sys
+try:
+    from systemd.daemon
+    ffrom systemd import journal
+    systemd_enable=True
+except ImportError:
+    systemd_enable=False
 
 from telegram.inline.inlinekeyboardbutton import InlineKeyboardButton
 from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
@@ -109,13 +115,14 @@ def process_callback(update, context):
         return
     query = update.callback_query
 
+    print(query)
     button,count = query.data.split(":")
     count = int(count) + 1
 
     if button == "d":
-        query.answer("感谢您的👍",show_alert=True)
+        query.answer("你觉得这个适合群风",show_alert=True)
     else:
-        query.answer("收到您的👎",show_alert=True)
+        query.answer("你觉得不应该发送这样的匿名消息",show_alert=True)
 
     buttons = query.message.reply_markup.inline_keyboard[0]
     update_buttons = []
@@ -172,6 +179,10 @@ if __name__ == '__main__':
 
     updater.start_polling()
     print('Started')
+    if systemd_enable:
+        systemd.daemon.notify('READY=1')
+        journal.send('Starting... (ID: ' + str(CONFIG['ID']) + ', Username: ' + CONFIG['Username'] + ')')
+
     updater.idle()
     print('Stopping...')
     print('Stopped.')
