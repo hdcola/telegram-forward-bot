@@ -11,7 +11,7 @@ import getopt
 import sys
 try:
     from systemd.daemon
-    ffrom systemd import journal
+    from systemd import journal
     systemd_enable=True
 except ImportError:
     systemd_enable=False
