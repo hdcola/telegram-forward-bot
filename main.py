@@ -68,11 +68,18 @@ def process_command(update, context):
         return
 
     if update.message.from_user.id == CONFIG['Admin']:
-        if command == 'setgroup':
+        if command == 'feedbackoff':
+            CONFIG['Feedback']=False
             save_config()
             bot.send_message(chat_id=update.message.chat_id,
-                             text="已设置本群为审稿群")
-            return
+                             text="Feedback已经关闭")
+        elif command == 'feedbackon':
+            CONFIG['Feedback']=True
+            save_config()
+            bot.send_message(chat_id=update.message.chat_id,
+                             text="Feedback已经接开")
+        return
+
 
 
 def send_anonymous_post(bot, msg, editor):
