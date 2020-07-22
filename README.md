@@ -48,11 +48,16 @@ mkdir -p ~/.config/forwardbot/
 
 ### 管理员命令
 
-当你是管理员（你是config.json的Admin或你是Publish_Group_ID中第一个群的管理员时），你可以向Bot发送以下管理指令
+当你是Publish_Group_ID中第一个群的管理员时，你可以向Bot发送以下管理指令
 
 * `/help` 显示帮助
 * `/feedbackon` 关闭所有匿名发送的反馈
 * `/feedbackoff` 打开所有匿名发送的反馈
+
+当你是Bot管理员时，你可以向Bot发送以下管理指令
+
+* `/update` 执行Config.json中的Update_shell的命令，参照`gitpull.sh`
+
 
 ## 运行
 

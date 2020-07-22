@@ -76,6 +76,13 @@ def process_command(update, context):
 /feedbackoff 关闭所有匿名发送的反馈
 /feedbackon 打开所有匿名发送的反馈
             """
+
+        if update.message.from_user.id == CONFIG['Admin']:
+            helptext +="""
+
+Bot管理员指令
+/update 从Github上升级到最新的代码
+            """
         
         bot.send_message(chat_id=update.message.chat_id,
                          text=helptext)
