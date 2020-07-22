@@ -92,7 +92,13 @@ def process_command(update, context):
             save_config()
             bot.send_message(chat_id=update.message.chat_id,
                              text="Feedback已经打开")
-        return
+    if update.message.from_user.id == CONFIG['Admin'] :
+        if command == 'update':
+            gitpull_shell=CONFIG['Update_shell'] + ' > /tmp/gitpull.txt'
+            os.system(gitpull_shell)
+            output = open("/tmp/gitpull.txt").read()
+            update.message.reply_text("Update命令执行完毕。输出内容：\n%s" % output)
+    return
 
 
 
