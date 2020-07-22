@@ -48,8 +48,9 @@ mkdir -p ~/.config/forwardbot/
 
 ### 管理员命令
 
-当你是管理员（你的id在config.json的Admin中指明了），你可以向Bot发送以下管理指令
+当你是管理员（你是config.json的Admin或你是Publish_Group_ID中第一个群的管理员时），你可以向Bot发送以下管理指令
 
+* `/help` 显示帮助
 * `/feedbackon` 关闭所有匿名发送的反馈
 * `/feedbackoff` 打开所有匿名发送的反馈
 

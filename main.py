@@ -35,6 +35,16 @@ def check_member(bot,chatid,userid):
     except telegram.TelegramError as e:
         return False
 
+def check_admin(bot,chatid,userid):
+    try:
+        member = bot.get_chat_member(chatid,userid)
+        if member.status in [ 'administrator' , 'creator']:
+            return True
+        return False
+    except telegram.TelegramError as e:
+        return False
+
+
 def process_msg(update, context):
     bot = context.bot
     if update.channel_post != None:
@@ -57,17 +67,21 @@ def process_command(update, context):
         return
     command = update.message.text[1:].replace(CONFIG['Username'], ''
             ).lower()
-    if command == 'start':
+    if command == 'start' or command == 'help':
+        helptext = "将文字、图片、音频/语音、视频、文件发送给我，我将直接把对它们匿名转发到你所在的群"
+        if update.message.from_user.id == CONFIG['Admin'] or check_admin(bot,CONFIG['Publish_Group_ID'][0],update.message.from_user.id):
+            helptext += """
+
+管理员指令：
+/feedbackoff 关闭所有匿名发送的反馈
+/feedbackon 打开所有匿名发送的反馈
+            """
+        
         bot.send_message(chat_id=update.message.chat_id,
-                         text="""可接收的投稿类型:
-文字
-图片
-音频/语音
-视频
-文件""")
+                         text=helptext)
         return
 
-    if update.message.from_user.id == CONFIG['Admin']:
+    if update.message.from_user.id == CONFIG['Admin'] or check_admin(bot,CONFIG[Publish_Group_ID][0],update.message.from_user.id):
         if command == 'feedbackoff':
             CONFIG['Feedback']=False
             save_config()
