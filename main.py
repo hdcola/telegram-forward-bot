@@ -69,7 +69,6 @@ def process_command(update, context):
 
     if update.message.from_user.id == CONFIG['Admin']:
         if command == 'setgroup':
-            CONFIG['Group_ID'] = update.message.chat_id
             save_config()
             bot.send_message(chat_id=update.message.chat_id,
                              text="已设置本群为审稿群")

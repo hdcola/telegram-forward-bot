@@ -36,17 +36,14 @@ mkdir ~/.forwardbot/
 {
     "Admin": 0,                   //管理员用户ID（通常为8~9位数字）
     "Token": "",                  //Bot的Token
-    "Group_ID": 0,               //审核群或用户的ID
     "Publish_Group_ID": []        //群ID（如：@channel）列表
 }
 ```
 
 有几种典型的使用方法：
 
-* Admin/Group_ID/Publish_Group_ID相同时，你就可以做最简单的测试
+* Admin/Publish_Group_ID相同时，你就可以做最简单的测试
 * 可以在Publish_Group_ID中加入多个群或频道，这时发送的内容会发到多个你指定的频道里去，列表支持数字、字符串混合
-
-当用户存在于目标Publish_Group_ID中，哪么不需要审核就会直发，当用户不存在于目标群中，哪么会通过Group_ID的群审核后才能发送出来。
 
 ## 运行
 
