@@ -91,7 +91,7 @@ def process_command(update, context):
             CONFIG['Feedback']=True
             save_config()
             bot.send_message(chat_id=update.message.chat_id,
-                             text="Feedback已经接开")
+                             text="Feedback已经打开")
         return
 
 
