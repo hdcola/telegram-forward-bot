@@ -82,6 +82,7 @@ def process_command(update, context):
 
 Bot管理员指令
 /update 从Github上升级到最新的代码
+/restart 重启Bot Service
             """
         
         bot.send_message(chat_id=update.message.chat_id,

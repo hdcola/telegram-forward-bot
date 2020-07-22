@@ -56,8 +56,8 @@ mkdir -p ~/.config/forwardbot/
 
 当你是Bot管理员时，你可以向Bot发送以下管理指令
 
-* `/update` 执行Config.json中的Update_shell的命令，参照`gitpull.sh`
-
+* `/update` 执行config.json中的Update_shell的命令，参照`gitpull.sh`
+* `/restart` 执行config.json中的Resatrt_shell的命令，参照`restart.sh`
 
 ## 运行
 
