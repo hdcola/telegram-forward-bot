@@ -46,6 +46,13 @@ mkdir -p ~/.config/forwardbot/
 * Admin/Publish_Group_ID相同时，你就可以做最简单的测试
 * 可以在Publish_Group_ID中加入多个群或频道，这时发送的内容会发到多个你指定的频道里去，列表支持数字、字符串混合
 
+### 管理员命令
+
+当你是管理员（你的id在config.json的Admin中指明了），你可以向Bot发送以下管理指令
+
+* `/feedbackon` 关闭所有匿名发送的反馈
+* `/feedbackoff` 打开所有匿名发送的反馈
+
 ## 运行
 
 ### 手工运行
