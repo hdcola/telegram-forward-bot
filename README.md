@@ -36,6 +36,7 @@ mkdir -p ~/.config/forwardbot/
 {
     "Admin": 0,                   //管理员用户ID（通常为8~9位数字）
     "Token": "",                  //Bot的Token
+    "Feedback": false,            //是否打开转发时的Feedback
     "Publish_Group_ID": []        //群ID（如：@channel）列表
 }
 ```

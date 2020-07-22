@@ -76,8 +76,11 @@ def process_command(update, context):
 
 
 def send_anonymous_post(bot, msg, editor):
-    keyboard = [[InlineKeyboardButton("👍",callback_data="d:0"),
-                InlineKeyboardButton("👎",callback_data="c:0")]]
+    if CONFIG['Feedback']:
+        keyboard = [[InlineKeyboardButton("👍",callback_data="d:0"),
+                    InlineKeyboardButton("👎",callback_data="c:0")]]
+    else:
+        keyboard = [[]]
     replay_markup = InlineKeyboardMarkup(keyboard)
 
     for chatid in CONFIG['Publish_Group_ID']:
@@ -119,9 +122,9 @@ def process_callback(update, context):
     count = int(count) + 1
 
     if button == "d":
-        query.answer("你觉得这个适合群风",show_alert=True)
+        query.answer("你觉得这个适合群风")
     else:
-        query.answer("你觉得不应该发送这样的匿名消息",show_alert=True)
+        query.answer("你觉得不应该发送这样的匿名消息")
 
     buttons = query.message.reply_markup.inline_keyboard[0]
     update_buttons = []
