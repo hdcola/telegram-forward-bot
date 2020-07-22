@@ -101,10 +101,15 @@ Bot管理员指令
                              text="Feedback已经打开")
     if update.message.from_user.id == CONFIG['Admin'] :
         if command == 'update':
-            gitpull_shell=CONFIG['Update_shell'] + ' > /tmp/gitpull.txt'
-            os.system(gitpull_shell)
+            shell=CONFIG['Update_shell'] + ' > /tmp/gitpull.txt'
+            os.system(shell)
             output = open("/tmp/gitpull.txt").read()
-            update.message.reply_text("Update命令\n%s\n执行完毕。输出内容：\n%s" % (gitpull_shell,output))
+            update.message.reply_text("Update命令\n%s\n执行完毕。输出内容：\n%s" % (shell,output))
+        elif command == "restart":
+            shell=CONFIG['Restart_shell'] + ' > /tmp/restart.txt'
+            os.system(shell)
+            output = open("/tmp/restart.txt").read()
+            update.message.reply_text("Update命令\n%s\n执行完毕。输出内容：\n%s" % (shell,output))
     return
 
 
