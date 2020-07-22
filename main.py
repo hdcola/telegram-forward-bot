@@ -104,7 +104,7 @@ Bot管理员指令
             gitpull_shell=CONFIG['Update_shell'] + ' > /tmp/gitpull.txt'
             os.system(gitpull_shell)
             output = open("/tmp/gitpull.txt").read()
-            update.message.reply_text("Update命令执行完毕。输出内容：\n%s" % output)
+            update.message.reply_text("Update命令\n%s\n执行完毕。输出内容：\n%s" % (gitpull_shell,output))
     return
 
 
