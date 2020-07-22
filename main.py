@@ -141,7 +141,7 @@ def help():
 
 if __name__ == '__main__':
 
-    PATH = os.path.dirname(os.path.expanduser("~/.forwardbot/"))
+    PATH = os.path.dirname(os.path.expanduser("~/.config/forwardbot/"))
 
     try:
         opts, args = getopt.getopt(sys.argv[1:],"hc:",["config="])

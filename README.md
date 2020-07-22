@@ -23,7 +23,7 @@ pip install python-telegram-bot
 ## 使用
 
 ```
-mkdir ~/.forwardbot/
+mkdir -p ~/.config/forwardbot/
 ```
 
 将项目中的`config.json`复制到这个目录中。你也可以把配置文件放到你自己喜欢的地方。
@@ -53,7 +53,7 @@ mkdir ~/.forwardbot/
 python main.py
 ```
 
-会从`~/.forwardbot`目录中读取配置文件和存取data。
+会从`~/.config/forwardbot/`目录中读取配置文件和存取data。
 
 也可以使用
 
