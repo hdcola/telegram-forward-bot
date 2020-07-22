@@ -7,6 +7,7 @@
 * 规避公共群的个人信息被存档的问题
 * 防止群中有他人的帐号出现问题，泄漏你的个人信息
 * 通过对发出的内容加入顶和踩的功能让大家为匿名发送什么逐渐达成共识
+* 用Bot完成群管理员和Bot管理员的日常设置和操作
 
 注意，一个帐户注册后，你的`userid`是永远不变的，所以telegram并不真正安全。
 
@@ -34,10 +35,12 @@ mkdir -p ~/.config/forwardbot/
 
 ```
 {
-    "Admin": 0,                   //管理员用户ID（通常为8~9位数字）
-    "Token": "",                  //Bot的Token
-    "Feedback": false,            //是否打开转发时的Feedback
-    "Publish_Group_ID": []        //群ID（如：@channel）列表
+    "Admin": 0,                   // 管理员用户ID（通常为8~9位数字）
+    "Token": "",                  // Bot的Token
+    "Feedback": false,            // 是否打开转发时的Feedback
+    "Update_shell": "",           // 执行升级的脚本路径，用以支持 /update 命令
+    "Restart_shell": "",          // 执行重启服务的脚本路径，用以支持 /restart 命令
+    "Publish_Group_ID": []        // 群ID（如：@channel）列表
 }
 ```
 
