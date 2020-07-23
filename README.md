@@ -12,6 +12,8 @@
 
 注意，一个帐户注册后，你的`userid`是永远不变的，所以telegram并不真正安全。
 
+我的机器人都运行在RaspberryPi上，可以来 https://t.me/RaspberryPiCN 讨论机器人的使用和有关RaspberryPi的内容。
+
 ## 安装
 
 建议使用venv环境，本项目必须使用Python3，本人不打算再在Python2中做任何测试
@@ -159,6 +161,6 @@ sudo systemctl start forwardbot_service
 ## 感谢
 
 * 感谢 https://github.com/python-telegram-bot/python-telegram-bot
-* 代码不少使用了 https://github.com/Netrvin/telegram-submission-bot 感谢他的轮子
+* 代码最早使用了 https://github.com/Netrvin/telegram-submission-bot 感谢他的轮子
 * 有如何在systemd中启动Python的程序感谢 https://github.com/torfsen/python-systemd-tutorial 的文章
 * 感谢 https://github.com/systemd/python-systemd
