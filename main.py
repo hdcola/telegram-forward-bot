@@ -160,7 +160,11 @@ def send_anonymous_post(bot, msg, editor):
                             photo=msg.photo[0], caption=msg.caption,
                             reply_markup=replay_markup)
         else:
-            if 'url' in msg.entities:
+            for i in msg.entities:
+                types.append(i.type)
+
+            print(msg,"\n",types)
+            if 'url' in types:
                 r = bot.send_message(chat_id=chatid,
                                     text=msg.text_markdown,
                                     parse_mode=telegram.ParseMode.MARKDOWN,
@@ -230,7 +234,6 @@ if __name__ == '__main__':
     print('Started')
     if systemd_enable:
         systemd.daemon.notify('READY=1')
-        journal.send('Starting... (ID: ' + str(CONFIG['ID']) + ', Username: ' + CONFIG['Username'] + ')')
 
     updater.idle()
     print('Stopping...')
