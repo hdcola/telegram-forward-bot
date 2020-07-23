@@ -26,4 +26,7 @@ def setdefault():
     CONFIG.setdefault("Feedback",False)
     CONFIG.setdefault("Update_shell","")
     CONFIG.setdefault("Restart_shell","")
+    CONFIG.setdefault("Feedback_alert",False)
+    CONFIG.setdefault("Feedback_text","")
+    CONFIG.setdefault("Feedback_answer","")
     save_config()

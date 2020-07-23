@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import config
+from  feedback import feedback
 from telegram.ext import Updater, MessageHandler, Filters, CallbackQueryHandler
 import telegram
 import os
@@ -111,11 +112,9 @@ Bot管理员指令
 
 def send_anonymous_post(bot, msg, editor):
     if CONFIG['Feedback']:
-        keyboard = [[InlineKeyboardButton("👍",callback_data="d:0"),
-                    InlineKeyboardButton("👎",callback_data="c:0")]]
+        replay_markup = feedback.init_replay_markup_str(CONFIG['Feedback_text'],CONFIG['Feedback_answer'])
     else:
-        keyboard = [[]]
-    replay_markup = InlineKeyboardMarkup(keyboard)
+        replay_markup = InlineKeyboardMarkup([[]])
 
     for chatid in CONFIG['Publish_Group_ID']:
         if msg.audio != None:
@@ -150,27 +149,7 @@ def process_callback(update, context):
     if update.channel_post != None:
         return
     query = update.callback_query
-
-    print(query)
-    button,count = query.data.split(":")
-    count = int(count) + 1
-
-    if button == "d":
-        query.answer("你觉得这个适合群风")
-    else:
-        query.answer("你觉得不应该发送这样的匿名消息")
-
-    buttons = query.message.reply_markup.inline_keyboard[0]
-    update_buttons = []
-
-    for b in buttons:
-        if b.callback_data == query.data:
-            update_buttons.append(InlineKeyboardButton("%s%s"%(b.text[0:1],count),callback_data="%s:%s"%(button,count) ) )
-        else:
-            update_buttons.append(InlineKeyboardButton(b.text,callback_data=b.callback_data ) )
-
-    replay_markup = InlineKeyboardMarkup([update_buttons])
-    
+    replay_markup = feedback.get_update_replay_markupr(query)
     query.edit_message_reply_markup(replay_markup)
 
 def help():
@@ -204,6 +183,9 @@ if __name__ == '__main__':
     CONFIG['Username'] = '@' + me.username
     config.setdefault()
     print('Starting... (ID: ' + str(CONFIG['ID']) + ', Username: ' + CONFIG['Username'] + ')')
+
+    if CONFIG['Feedback']:
+        replay_markup = feedback.init_replay_markup_str(CONFIG['Feedback_text'],CONFIG['Feedback_answer'])
 
     dispatcher.add_handler(CallbackQueryHandler(process_callback))
     dispatcher.add_handler(MessageHandler(Filters.command,process_command))
