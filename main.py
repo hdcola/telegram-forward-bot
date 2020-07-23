@@ -1,8 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import time
-import json
+import config
 from telegram.ext import Updater, MessageHandler, Filters, CallbackQueryHandler
 import telegram
 import os
@@ -22,11 +21,6 @@ from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
                     )
-
-def save_config():
-    f = open(os.path.join(PATH,"config.json"), 'w')
-    f.write(json.dumps(CONFIG, indent=4))
-    f.close()
 
 def check_member(bot,chatid,userid):
     try:
@@ -89,15 +83,15 @@ Bot管理员指令
                          text=helptext)
         return
 
-    if update.message.from_user.id == CONFIG['Admin'] or check_admin(bot,CONFIG[Publish_Group_ID][0],update.message.from_user.id):
+    if update.message.from_user.id == CONFIG['Admin'] or check_admin(bot,CONFIG['Publish_Group_ID'][0],update.message.from_user.id):
         if command == 'feedbackoff':
             CONFIG['Feedback']=False
-            save_config()
+            config.save_config()
             bot.send_message(chat_id=update.message.chat_id,
                              text="Feedback已经关闭")
         elif command == 'feedbackon':
             CONFIG['Feedback']=True
-            save_config()
+            config.save_config()
             bot.send_message(chat_id=update.message.chat_id,
                              text="Feedback已经打开")
     if update.message.from_user.id == CONFIG['Admin'] :
@@ -199,7 +193,8 @@ if __name__ == '__main__':
         elif opt in ("-c","--config"):
             PATH = arg
 
-    CONFIG = json.loads(open(os.path.join(PATH,"config.json"), 'r').read())
+    config.config_file = os.path.join(PATH,"config.json")
+    CONFIG = config.load_config()
 
     updater = Updater(CONFIG['Token'], use_context=True)
     dispatcher = updater.dispatcher
@@ -207,7 +202,7 @@ if __name__ == '__main__':
     me = updater.bot.get_me()
     CONFIG['ID'] = me.id
     CONFIG['Username'] = '@' + me.username
-
+    config.setdefault()
     print('Starting... (ID: ' + str(CONFIG['ID']) + ', Username: ' + CONFIG['Username'] + ')')
 
     dispatcher.add_handler(CallbackQueryHandler(process_callback))
