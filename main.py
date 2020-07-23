@@ -142,7 +142,7 @@ def send_anonymous_post(bot, msg, editor):
         if msg.audio != None:
             r = bot.send_audio(chat_id=chatid,
                             audio=msg.audio, caption=msg.caption,
-                            reply_markup=replay_markup)
+                                reply_markup=replay_markup)
         elif msg.document != None:
             r = bot.send_document(chat_id=chatid,
                                 document=msg.document,
@@ -150,8 +150,7 @@ def send_anonymous_post(bot, msg, editor):
                                 reply_markup=replay_markup)
         elif msg.voice != None:
             r = bot.send_voice(chat_id=chatid,
-                            voice=msg.voice, caption=msg.caption,
-                            reply_markup=replay_markup)
+                            voice=msg.voice, caption=msg.caption)
         elif msg.video != None:
             r = bot.send_video(chat_id=chatid,
                             video=msg.video, caption=msg.caption,
@@ -161,10 +160,15 @@ def send_anonymous_post(bot, msg, editor):
                             photo=msg.photo[0], caption=msg.caption,
                             reply_markup=replay_markup)
         else:
-            r = bot.send_message(chat_id=chatid,
-                                text=msg.text_markdown,
-                                parse_mode=telegram.ParseMode.MARKDOWN,
-                                reply_markup=replay_markup)
+            if 'url' in msg.entities:
+                r = bot.send_message(chat_id=chatid,
+                                    text=msg.text_markdown,
+                                    parse_mode=telegram.ParseMode.MARKDOWN,
+                                    reply_markup=replay_markup)
+            else:
+                r = bot.send_message(chat_id=chatid,
+                                    text=msg.text_markdown,
+                                    parse_mode=telegram.ParseMode.MARKDOWN)
 
 
 def process_callback(update, context):
