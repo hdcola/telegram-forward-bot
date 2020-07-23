@@ -164,7 +164,7 @@ def send_anonymous_post(bot, msg, editor):
             for i in msg.entities:
                 types.append(i.type)
 
-            print(msg,"\n",types)
+            # print(msg,"\n",types)
             if 'url' in types:
                 r = bot.send_message(chat_id=chatid,
                                     text=msg.text_markdown,
