@@ -20,7 +20,7 @@ def load_config():
 
 def save_config():
     with open(config_file, 'w') as configfile:
-        dump(CONFIG, configfile, indent=4)
+        dump(CONFIG, configfile, indent=4,ensure_ascii=False)
 
 def setdefault():
     CONFIG.setdefault("Feedback",False)
@@ -30,3 +30,6 @@ def setdefault():
     CONFIG.setdefault("Feedback_text","")
     CONFIG.setdefault("Feedback_answer","")
     save_config()
+
+def get_json():
+    return dumps(CONFIG,indent=4,ensure_ascii=False)

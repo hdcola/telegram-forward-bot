@@ -3,7 +3,7 @@
 
 import config
 from  feedback import feedback
-from telegram.ext import Updater, MessageHandler, Filters, CallbackQueryHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackQueryHandler
 import telegram
 import os
 import logging
@@ -15,8 +15,6 @@ try:
     systemd_enable=True
 except ImportError:
     systemd_enable=False
-
-from telegram.inline.inlinekeyboardbutton import InlineKeyboardButton
 from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
 
 logging.basicConfig(level=logging.INFO,
@@ -78,6 +76,9 @@ def process_command(update, context):
 Bot管理员指令
 /update 从Github上升级到最新的代码
 /restart 重启Bot Service
+/getconfig 得到现有的Bot配置
+/setfeedback <str> 设置反馈按钮，每个按钮的文字用逗号分开
+/setanswer <str> 设置反馈按钮按下后的提示信息，应该和铵钮数量相同，用逗号分开
             """
         
         bot.send_message(chat_id=update.message.chat_id,
@@ -95,6 +96,7 @@ Bot管理员指令
             config.save_config()
             bot.send_message(chat_id=update.message.chat_id,
                              text="Feedback已经打开")
+
     if update.message.from_user.id == CONFIG['Admin'] :
         if command == 'update':
             shell=CONFIG['Update_shell'] + ' > /tmp/gitpull.txt'
@@ -106,9 +108,29 @@ Bot管理员指令
             os.system(shell)
             output = open("/tmp/restart.txt").read()
             update.message.reply_text("Update命令\n%s\n执行完毕。输出内容：\n%s" % (shell,output))
+        elif command == "getconfig":
+            update.message.reply_text(config.get_json())
     return
 
+def set_answer(update,context):
+    if update.message.from_user.id == CONFIG['Admin'] :
+        try:
+            CONFIG['Feedback_answer'] = context.args[0]
+            config.save_config()
+            update.message.reply_text('反馈消息已经更新为:%s' % CONFIG['Feedback_answer'])
+            return
+        except (IndexError, ValueError):
+            update.message.reply_text('使用说明: /setanswer 赞了一把,踩了一脚,吐了一地\n请使用逗号将每个按钮的反馈消息分开')
 
+def set_feedback(update,context):
+    if update.message.from_user.id == CONFIG['Admin'] :
+        try:
+            CONFIG['Feedback_text'] = context.args[0]
+            config.save_config()
+            update.message.reply_text('反馈按钮已经更新为:%s' % CONFIG['Feedback_text'] )
+            return
+        except (IndexError, ValueError):
+            update.message.reply_text('使用说明: /setfeedback 👍,👎,🤮\n请使用逗号将按钮分开')
 
 def send_anonymous_post(bot, msg, editor):
     if CONFIG['Feedback']:
@@ -187,6 +209,10 @@ if __name__ == '__main__':
     if CONFIG['Feedback']:
         replay_markup = feedback.init_replay_markup_str(CONFIG['Feedback_text'],CONFIG['Feedback_answer'])
 
+    dispatcher.add_handler(CommandHandler("setfeedback", set_feedback,
+                                  pass_args=True))
+    dispatcher.add_handler(CommandHandler("setanswer", set_answer,
+                                  pass_args=True))
     dispatcher.add_handler(CallbackQueryHandler(process_callback))
     dispatcher.add_handler(MessageHandler(Filters.command,process_command))
     dispatcher.add_handler(MessageHandler( Filters.text
