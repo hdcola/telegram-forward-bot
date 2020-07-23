@@ -160,6 +160,7 @@ def send_anonymous_post(bot, msg, editor):
                             photo=msg.photo[0], caption=msg.caption,
                             reply_markup=replay_markup)
         else:
+            types = []
             for i in msg.entities:
                 types.append(i.type)
 
