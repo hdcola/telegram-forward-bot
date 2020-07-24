@@ -9,12 +9,7 @@ import os
 import logging
 import getopt
 import sys
-try:
-    import systemd.daemon
-    from systemd import journal
-    systemd_enable=True
-except ImportError:
-    systemd_enable=False
+import mysystemd
 from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
 
 logging.basicConfig(level=logging.INFO,
@@ -233,8 +228,7 @@ if __name__ == '__main__':
 
     updater.start_polling()
     print('Started')
-    if systemd_enable:
-        systemd.daemon.notify('READY=1')
+    mysystemd.ready()
 
     updater.idle()
     print('Stopping...')
