@@ -165,7 +165,7 @@ def send_anonymous_post(bot, msg, editor):
                 types.append(i.type)
 
             # print(msg,"\n",types)
-            if 'url' in types:
+            if 'url' in types or 'text_link' in types:
                 r = bot.send_message(chat_id=chatid,
                                     text=msg.text_markdown,
                                     parse_mode=telegram.ParseMode.MARKDOWN,
