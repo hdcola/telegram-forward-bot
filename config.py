@@ -29,7 +29,10 @@ def save_config():
         dump(CONFIG, configfile, indent=4,ensure_ascii=False)
 
 def setdefault():
-    CONFIG.setdefault("Feedback",False)
+    CONFIG.setdefault("Admin","")
+    CONFIG.setdefault("Token","")
+    CONFIG.setdefault("Publish_Group_ID",[])
+    CONFIG.setdefault("Feedback",True)
     CONFIG.setdefault("Update_shell","")
     CONFIG.setdefault("Restart_shell","")
     CONFIG.setdefault("Feedback_alert",False)
