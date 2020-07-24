@@ -199,7 +199,12 @@ if __name__ == '__main__':
             PATH = arg
 
     config.config_file = os.path.join(PATH,"config.json")
-    CONFIG = config.load_config()
+    try:
+        CONFIG = config.load_config()
+    except FileNotFoundError:
+        print("config.json not found.Generate a new configuration file in %s" % config.config_file)
+        config.setdefault()
+        sys.exit(2)
 
     updater = Updater(CONFIG['Token'], use_context=True)
     dispatcher = updater.dispatcher
