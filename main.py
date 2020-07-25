@@ -104,7 +104,9 @@ Bot管理员指令
             output = open("/tmp/restart.txt").read()
             update.message.reply_text("Update命令\n%s\n执行完毕。输出内容：\n%s" % (shell,output))
         elif command == "getconfig":
-            update.message.reply_text(config.get_json())
+            cfg = CONFIG.copy()
+            cfg['Token'] = "***"
+            update.message.reply_text(dumps(cfg,indent=4,ensure_ascii=False)) 
     return
 
 def set_answer(update,context):
