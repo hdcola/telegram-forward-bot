@@ -50,7 +50,8 @@ def admin_cmd_callback(update : Update, context : CallbackContext):
             os.system(shell)
             msg = "反回信息:\n" + open("/tmp/gitpull.txt").read()
             query.answer("更新代码")
-        query.edit_message_text(text=msg,reply_markup=init_replay_markup())
+        if msg != query.message.text :
+            query.edit_message_text(text=msg,reply_markup=init_replay_markup())
 
 def init_buttons():
         buttons = []
