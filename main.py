@@ -10,7 +10,9 @@ import logging
 import getopt
 import sys
 import mysystemd
+import admincmd
 from telegram.inline.inlinekeyboardmarkup import InlineKeyboardMarkup
+from json import dumps
 
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -69,11 +71,7 @@ def process_command(update, context):
             helptext +="""
 
 Bot管理员指令
-/update 从Github上升级到最新的代码
-/restart 重启Bot Service
-/getconfig 得到现有的Bot配置
-/setfeedback <str> 设置反馈按钮，每个按钮的文字用逗号分开
-/setanswer <str> 设置反馈按钮按下后的提示信息，应该和铵钮数量相同，用逗号分开
+/admin 进入Bot管理员指令菜单
             """
         
         bot.send_message(chat_id=update.message.chat_id,
@@ -219,6 +217,9 @@ if __name__ == '__main__':
 
     if CONFIG['Feedback']:
         replay_markup = feedback.init_replay_markup_str(CONFIG['Feedback_text'],CONFIG['Feedback_answer'])
+    
+    # 加入/admin和它按钮的所有回调处理
+    admincmd.add_dispatcher(dispatcher)
 
     dispatcher.add_handler(CommandHandler("setfeedback", set_feedback,
                                   pass_args=True))
