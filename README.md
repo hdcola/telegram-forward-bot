@@ -62,9 +62,7 @@ mkdir -p ~/.config/forwardbot/
 
 当你是Bot管理员时，你可以向Bot发送以下管理指令
 
-* `/update` 执行config.json中的Update_shell的命令，参照`gitpull.sh`
-* `/restart` 执行config.json中的Resatrt_shell的命令，参照`restart.sh`
-* `/getconfig` 得到现有的Bot配置
+* `/Admin` Bot重启、查看配置、升级更新等功能
 * `/setfeedback` <str> 设置反馈按钮，每个按钮的文字用逗号分开
 * `/setanswer` <str> 设置反馈按钮按下后的提示信息，应该和铵钮数量相同，用逗号分开
 

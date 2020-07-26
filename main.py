@@ -72,6 +72,8 @@ def process_command(update, context):
 
 Bot管理员指令
 /admin 进入Bot管理员指令菜单
+/setfeedback <str> 设置反馈按钮，每个按钮的文字用逗号分开
+/setanswer <str> 设置反馈按钮按下后的提示信息，应该和铵钮数量相同，用逗号分开
             """
         
         bot.send_message(chat_id=update.message.chat_id,
@@ -89,22 +91,6 @@ Bot管理员指令
             config.save_config()
             bot.send_message(chat_id=update.message.chat_id,
                              text="Feedback已经打开")
-
-    if update.message.from_user.id == CONFIG['Admin'] :
-        if command == 'update':
-            shell=CONFIG['Update_shell'] + ' > /tmp/gitpull.txt'
-            os.system(shell)
-            output = open("/tmp/gitpull.txt").read()
-            update.message.reply_text("Update命令\n%s\n执行完毕。输出内容：\n%s" % (shell,output))
-        elif command == "restart":
-            shell=CONFIG['Restart_shell'] + ' > /tmp/restart.txt'
-            os.system(shell)
-            output = open("/tmp/restart.txt").read()
-            update.message.reply_text("Update命令\n%s\n执行完毕。输出内容：\n%s" % (shell,output))
-        elif command == "getconfig":
-            cfg = CONFIG.copy()
-            cfg['Token'] = "***"
-            update.message.reply_text(dumps(cfg,indent=4,ensure_ascii=False)) 
     return
 
 def set_answer(update,context):

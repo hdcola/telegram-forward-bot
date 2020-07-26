@@ -16,12 +16,41 @@ from json import dumps
 import os
 
 cmds = {
-    "admin:config":"查看config",
-    "admin:update":"从Git更新",
-    "admin:restart":"重启服务",
-    "admin:status":"服务状态",
+    "admin:config":"配置",
+    "admin:update":"更新",
+    "admin:restart":"重启",
+    "admin:status":"状态",
     "admin:help":"帮助"
     }
+
+def admin_cmd_callback(update : Update, context : CallbackContext):
+    if update.callback_query.from_user.id == config.CONFIG['Admin'] :
+        msg=""
+        query = update.callback_query
+        if query.data == "admin:config":
+            cfg = config.CONFIG.copy()
+            cfg['Token'] = "***"
+            query.answer("获取配置")
+            msg = dumps(cfg,indent=4,ensure_ascii=False)
+        elif query.data == "admin:status":
+            shell=config.CONFIG['Status_shell'] + ' > /tmp/status.txt'
+            os.system(shell)
+            msg = "反回信息:\n" + open("/tmp/status.txt").read()
+            query.answer("获取状态")
+        elif query.data == "admin:restart":
+            shell=config.CONFIG['Restart_shell'] + ' > /tmp/restart.txt'
+            os.system(shell)
+            msg = "反回信息:\n" + open("/tmp/restart.txt").read()
+            query.answer("重启服务")
+        elif query.data == "admin:help":
+            msg = help()
+            query.answer()
+        elif query.data == "admin:update":
+            shell=config.CONFIG['Update_shell'] + ' > /tmp/gitpull.txt'
+            os.system(shell)
+            msg = "反回信息:\n" + open("/tmp/gitpull.txt").read()
+            query.answer("更新代码")
+        query.edit_message_text(text=msg,reply_markup=init_replay_markup())
 
 def init_buttons():
         buttons = []
@@ -42,30 +71,6 @@ def admin_cmd(update : Update, context : CallbackContext):
     if update.message.from_user.id == config.CONFIG['Admin'] :
         msg = help()
         update.message.reply_text(msg,reply_markup=init_replay_markup()) 
-
-def admin_cmd_callback(update : Update, context : CallbackContext):
-    if update.callback_query.from_user.id == config.CONFIG['Admin'] :
-        msg=""
-        query = update.callback_query
-        if query.data == "admin:config":
-            cfg = config.CONFIG.copy()
-            cfg['Token'] = "***"
-            query.answer("获取配置")
-            msg = dumps(cfg,indent=4,ensure_ascii=False)
-        elif query.data == "admin:restart":
-            shell=config.CONFIG['Restart_shell'] + ' > /tmp/restart.txt'
-            os.system(shell)
-            msg = "反回信息:\n" + open("/tmp/restart.txt").read()
-            query.answer("重启服务")
-        elif query.data == "admin:help":
-            msg = help()
-            query.answer()
-        elif query.data == "admin:update":
-            shell=config.CONFIG['Update_shell'] + ' > /tmp/gitpull.txt'
-            os.system(shell)
-            msg = "反回信息:\n" + open("/tmp/gitpull.txt").read()
-            query.answer("更新代码")
-        query.edit_message_text(text=msg,reply_markup=init_replay_markup())
 
 def add_dispatcher(dp: Dispatcher):
     dp.add_handler(CommandHandler(["admin"], admin_cmd))
